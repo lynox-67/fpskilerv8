@@ -1,298 +1,247 @@
--- SERVICIOS
-Jugadores locales = juego:GetService("Jugadores")
-UIS local = juego:GetService("UserInputService")
-RunService local = juego:GetService("RunService")
-ServicioTeletransporte local = juego:ObtenerServicio("ServicioTeletransporte")
-jugador local = Jugadores.JugadorLocal
+--// SERVICIOS
 
--- GUI
-interfaz gráfica de usuario local = Instancia.new("ScreenGui", jugador.PlayerGui)
+local Players = game:GetService("Players")
 
-marco local = Instancia.new("Marco", gui)
-marco.Tamaño = UDim2.nuevo(0, 350, 0, 340)
-marco.Posición = UDim2.new(0.3, 0, 0.3, 0)
-marco.ColorDeFondo3 = Color3.deRGB(20,20,20)
-marco.Activo = verdadero
-marco.BorderSizePixel = 0
+local Workspace = game:GetService("Workspace")
 
-título local = Instancia.new("TextLabel", marco)
-título.Tamaño = UDim2.new(1,0,0,35)
-título.ColorDeFondo3 = Color3.deRGB(40,40,40)
-title.Text = "Clonador de retraso de rzyx. ¡Únete para más scripts! https://discord.gg/3c7zMw7KqP"
-título.TextScaled = verdadero
-título.TextColor3 = Color3.new(1,1,1)
+local TweenService = game:GetService("TweenService")
 
--- BOTÓN CERRAR
-botón de cierre local = Instancia.new("Botón de texto", marco)
-botónCerrar.Tamaño = UDim2.nuevo(0.1,0,0,30)
-botónCerrar.Posición = UDim2.new(0.9, -5, 0, 5)
-cerrarBotón.Texto = "X"
-cerrarBotón.TextScaled = verdadero
-cerrarBotón.ColorDeFondo3 = Color3.fromRGB(255,0,0)
-closeButton.TextColor3 = Color3.nuevo(1,1,1)
-botónCerrar.BorderSizePixel = 0
+local player = Players.LocalPlayer
 
-closeButton.MouseButton1Click:Conectar(función()
-	gui:Destruir()
-fin)
+local PlayerGui = player:WaitForChild("PlayerGui")
 
--- BOTONES
-Botón de clonación local = Instancia.new("Botón de texto", marco)
-Botón clon.Tamaño = UDim2.nuevo(0.8,0,0,40)
-botón_clon.Posición = UDim2.new(0.1,0,0.15,0)
-cloneButton.Text = "Clonar 200+ LAG"
-cloneButton.TextScaled = verdadero
-Botón clon.ColorDeFondo3 = Color3.fromRGB(170,0,255)
-cloneButton.TextColor3 = Color3.new(1,1,1)
+--// FUNCIONES DE LIMPIEZA
 
-autoButton local = Instancia.new("TextButton", frame)
-autoButton.Tamaño = UDim2.nuevo(0.8,0,0,40)
-autoButton.Posición = UDim2.new(0.1,0,0.28,0)
-autoButton.Text = "Spam automático activado/desactivado"
-autoButton.TextScaled = verdadero
-autoButton.ColorDeFondo3 = Color3.fromRGB(255,85,0)
-autoButton.TextColor3 = Color3.new(1,1,1)
+local function cleanCharacter(char)
 
-clearButton local = Instance.new("TextButton", frame)
-clearButton.Tamaño = UDim2.nuevo(0.8,0,0,40)
-clearButton.Posición = UDim2.new(0.1,0,0.41,0)
-clearButton.Text = "Borrar clones"
-clearButton.TextScaled = verdadero
-clearButton.BackgroundColor3 = Color3.fromRGB(85,255,85)
-clearButton.TextColor3 = Color3.new(0,0,0)
+if not char then return end
 
-Botón de reincorporación local = Instancia.new("Botón de texto", marco)
-Botón de reincorporación.Tamaño = UDim2.nuevo(0.8,0,0,40)
-Botón de reincorporación.Posición = UDim2.new(0.1,0,0.54,0)
-rejoinButton.Text = "REINICIARSE AL SERVIDOR"
-Botón de reincorporación.TextScaled = verdadero
-Botón de reincorporación.ColorDeFondo3 = Color3.fromRGB(0,170,255)
-BotónReunirse.TextoColor3 = Color3.nuevo(1,1,1)
+for _, obj in ipairs(char:GetChildren()) do
 
-blackholeButton local = Instance.new("TextButton", frame)
-Botón de agujero negro.Tamaño = UDim2.nuevo(0.8,0,0,40)
-botónAgujeroNegro.Posición = UDim2.new(0.1,0,0.67,0)
-blackholeButton.Text = "AGUJERO NEGRO"
-blackholeButton.TextScaled = verdadero
-BotónAgujeroNegro.ColorDeFondo3 = Color3.fromRGB(0,0,0)
-botónAgujeroNegro.TextoColor3 = Color3.nuevo(1,1,1)
+if obj:IsA("Accessory")  
 
-botón de bloqueo local = Instancia.new("Botón de texto", marco)
-Botón de choque.Tamaño = UDim2.nuevo(0.8,0,0,40)
-Botón de choque.Posición = UDim2.new(0.1,0,0.80,0)
-crashButton.Text = "ACCIDENTE INSTANTÁNEO"
-crashButton.TextScaled = verdadero
-Botón de choque.ColorDeFondo3 = Color3.fromRGB(255,0,0)
-Botón de choque.TextoColor3 = Color3.nuevo(0,0,0)
+or obj:IsA("Shirt")  
 
--- ARRASTRAR
-hacer
-	arrastre local, dragStart, startPos
-	función local actualizar(entrada)
-		delta local = entrada.Posición - dragStart
-		marco.Posición = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
-	fin
+or obj:IsA("Pants")  
 
-	título.InputBegan:Connect(función(entrada)
-		si input.UserInputType == Enum.UserInputType.MouseButton1 o input.UserInputType == Enum.UserInputType.Touch entonces
-			arrastrando = verdadero
-			dragStart = entrada.Posición
-			startPos = frame.Position
-		fin
-	fin)
+or obj:IsA("ShirtGraphic")  
 
-	UIS.InputChanged:Conectar(función(entrada)
-		si arrastra y (input.UserInputType == Enum.UserInputType.MouseMovement o input.UserInputType == Enum.UserInputType.Touch) entonces
-			actualizar(entrada)
-		fin
-	fin)
+or obj:IsA("BodyColors")  
 
-	UIS.InputEnded:Connect(función(entrada)
-		si input.UserInputType == Enum.UserInputType.MouseButton1 o input.UserInputType == Enum.UserInputType.Touch entonces
-			arrastrando = falso
-		fin
-	fin)
-fin
+or obj:IsA("CharacterMesh")  
 
--- SISTEMA DE CLONACIÓN
-lista de clones locales = {}
-autoSpamming local = falso
+or obj:IsA("Hat") then  
 
-función local spawnChaosClones(count)
-	char local = jugador.Carácter o jugador.CarácterAñadido:Espera()
-	Si no es char entonces devuelve fin
-	char.Archivable = verdadero
-	raíz local = char:FindFirstChild("ParteRaízHumanoid")
-	Si no es root entonces devuelve fin
+	obj:Destroy()  
 
-	para i = 1, contar hacer
-		tarea.esperar(0.005)
-		clon local = char:Clone()
-		clone.Nombre = "ChaosClone_" .. (#cloneList + 1)
+end
 
-		para _,v en ipairs(clone:GetDescendants()) hacer
-			si v:IsA("Script") o v:IsA("LocalScript") entonces
-				v:Destruir()
-			fin
-			si v:IsA("BasePart") entonces
-				v.CanCollide = verdadero
-				v.Sin masa = falso
-			fin
-		fin
+end
 
-		clon.HumanoidRootPart.CFrame =
-			raíz.CFrame * CFrame.new(matemática.aleatorio(-3,3), matemática.aleatorio(0,3), -5)
+end
 
-		bv local = Instancia.new("BodyVelocity")
-		bv.Velocity = Vector3.new(math.random(-60,60), math.random(20,60), math.random(-60,60))
-		bv.MaxForce = Vector3.new(1e6,1e6,1e6)
-		bv.Parent = clone.HumanoidRootPart
+local function cleanAll()
 
-		clone.Parent = espacio de trabajo
-		tabla.insertar(cloneList, clonar)
-	fin
-fin
+for _, hum in ipairs(Workspace:GetDescendants()) do
 
-cloneButton.MouseButton1Click:Conectar(función()
-	spawnCaosClones(220)
-fin)
+if hum:IsA("Humanoid") and hum.Parent then  
 
-autoButton.MouseButton1Click:Conectar(función()
-	autoSpamming = no autoSpamming
-fin)
+	cleanCharacter(hum.Parent)  
 
-clearButton.MouseButton1Click:Conectar(función()
-	para _,c en ipairs(cloneList) hacer
-		si c y c.Padre entonces c:Destruir() fin
-	fin
-	lista de clones = {}
-fin)
+end
 
-tarea.spawn(función()
-	mientras que es cierto
-		tarea.esperar(0.05)
-		Si se envía spam automático entonces
-			spawnCaosClones(50)
-		fin
-	fin
-fin)
+end
 
--- AGUJERO NEGRO
-agujero negro localActivo = falso
-blackholePart local = Instance.new("Part", espacio de trabajo)
-blackholePart.Size = Vector3.new(2,2,2)
-blackholePart.Anchored = verdadero
-blackholePart.CanCollide = falso
-blackholePart.Material = Enumeración.Material.Neón
-blackholePart.Color = Color3.fromRGB(0,0,0)
+end
 
-blackholeButton.MouseButton1Click:Conectar(función()
-	Si blackholeActive entonces devuelve fin
-	blackholeActive = verdadero
-	tarea.spawn(función()
-		mientras blackholeActive lo hace
-			tarea.esperar(0.05)
-			blackholePart.Position = espacio de trabajo.CurrentCamera.CFrame.Position
-			para _,obj en ipairs(workspace:GetChildren()) hacer
-				si obj:IsA("Modelo") y obj.Nombre:find("ChaosClone_") entonces
-					hrp local = obj:FindFirstChild("ParteRaízHumanoid")
-					si hrp entonces
-						hrp.Velocity = (blackholePart.Position - hrp.Position).Unit * 200
-					fin
-				fin
-			fin
-		fin
-	fin)
-fin)
+local function fastCleanAsync()
 
--- CHOCAR
-crashButton.MouseButton1Click:Conectar(función()
-	mientras que es cierto
-		tarea.spawn(función()
-			local p = Instancia.new("Parte", espacio de trabajo)
-			p.Tamaño = Vector3.nuevo(100,100,100)
-			p.Anclado = falso
-			p.CanCollide = verdadero
-			p.Position = espacio de trabajo.CurrentCamera.CFrame.Position + Vector3.new(math.random(-50,50),math.random(-50,50),math.random(-50,50))
-		fin)
-	fin
-fin)
+task.spawn(function()
 
--- REUNIRSE AL MISMO SERVIDOR
-rejoinButton.MouseButton1Click:Conectar(función()
-	TeleportService:TeleportToPlaceInstance(juego.PlaceId, juego.JobId, jugador)
-fin)-- ==========================
--- SISTEMA DE LLAVES
--- =========================
+local startTime = os.clock()  
 
-local correctKey = "lynox" -- CAMBIE SU CLAVE AQUÍ
+while os.clock() - startTime < 2 do  
 
--- Ocultar el menú principal al inicio
-marco.Visible = falso
+	cleanAll()  
 
-fotograma clave local = Instancia.new("Frame", gui)
-fotograma clave.Tamaño = UDim2.nuevo(0, 300, 0, 150)
-keyFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
-fotograma clave.ColorDeFondo3 = Color3.fromRGB(30,30,30)
-fotograma clave.BorderSizePixel = 0
+	task.wait(0.3)  
 
-Título de clave local = Instancia.new("TextLabel", fotograma clave)
-Título_clave.Tamaño = UDim2.nuevo(1,0,0,35)
-TítuloClave.ColorDeFondo3 = Color3.fromRGB(45,45,45)
-keyTitle.Text = "Introducir tecla"
-keyTitle.TextScaled = verdadero
-keyTitle.TextColor3 = Color3.nuevo(1,1,1)
+end
 
-keyBox local = Instancia.new("Cuadro de texto", fotograma clave)
-keyBox.Tamaño = UDim2.nuevo(0.85,0,0,35)
-keyBox.Position = UDim2.new(0.075,0,0.35,0)
-keyBox.PlaceholderText = "Clave aquí..."
-keyBox.Texto = ""
-keyBox.TextScaled = verdadero
-keyBox.ColorDeFondo3 = Color3.fromRGB(60,60,60)
-keyBox.TextColor3 = Color3.new(1,1,1)
-keyBox.ClearTextOnFocus = falso
+end)
 
-estado de clave local = Instancia.new("TextLabel", fotograma clave)
-keyStatus.Size = UDim2.new(1,0,0,20)
-keyStatus.Position = UDim2.new(0,0,0.6,0)
-keyStatus.BackgroundTransparency = 1
-EstadoDeLaClave.Texto = ""
-keyStatus.TextScaled = verdadero
-keyStatus.TextColor3 = Color3.fromRGB(255,0,0)
+end
 
-botón_de_tecla local = Instancia.new("Botón_de_texto", fotograma_clave)
-botón_clave.Tamaño = UDim2.nuevo(0.5,0,0,30)
-botón_clave.Posición = UDim2.new(0.25,0,0.75,0)
-keyButton.Text = "Enviar"
-keyButton.TextScaled = verdadero
-botón_clave.ColorDeFondo3 = Color3.deRGB(0,170,255)
-keyButton.TextColor3 = Color3.nuevo(1,1,1)
+--// FPS KILLER
 
-keyButton.MouseButton1Click:Conectar(función()
-	si keyBox.Text == correctKey entonces
-		fotograma clave:Destruir()
-		marco.Visible = verdadero
-	demás
-		keyStatus.Text = "Clave incorrecta"
-	fin
-fin)-- OBTENER BOTÓN LLAVE (NUR HINZUGEFÜGT)
+local function executeFpsKiller()
 
-local getKeyButton = Instance.new("TextButton", keyFrame)
-obtenerBotónTecla.Tamaño = UDim2.nuevo(0.5,0,0,30)
-getKeyButton.Position = UDim2.new(0.25,0,1.05,0) - bajo Enviar
-getKeyButton.Text = "Obtener clave"
-obtenerKeyButton.TextScaled = verdadero
-obtenerBotónClave.ColorDeFondo3 = Color3.deRGB(120,0,255)
-obtenerBotónTecla.TextoColor3 = Color3.nuevo(1,1,1)
+fastCleanAsync()
 
-getKeyButton.MouseButton1Click:Conectar(función()
-	Si se establece el portapapeles, entonces
-		setclipboard("https://discord.gg/3c7zMw7KqP") -- HIER DEIN DISCORD
-	fin
-fin)
+local character = player.Character or player.CharacterAdded:Wait()
+
+local humanoid = character:WaitForChild("Humanoid")
+
+local backpack = player:WaitForChild("Backpack")
+
+local qc = backpack:FindFirstChild("Quantum Cloner")
+
+if qc then
+
+humanoid:EquipTool(qc)  
+
+
+
+for _, tool in ipairs(backpack:GetChildren()) do  
+
+	if tool:IsA("Tool") and tool ~= qc then  
+
+		tool.Parent = character  
+
+	end  
+
+end  
+
+
+
+task.wait(0.05)  
+
+qc:Activate()  
+
+task.wait(0.1)  
+
+humanoid:UnequipTools()
+
+end
+
+end
+
+--// SONIDO
+
+local function playSound()
+
+local sound = Instance.new("Sound")
+
+sound.SoundId = "rbxassetid://2888333253"
+
+sound.Volume = 1
+
+sound.Parent = PlayerGui
+
+sound:Play()
+
+end
+
+playSound()
+
+--// GUI
+
+local gui = Instance.new("ScreenGui")
+
+gui.Name = "FpsKillerGui"
+
+gui.ResetOnSpawn = false
+
+gui.Parent = PlayerGui
+
+local frame = Instance.new("Frame")
+
+frame.Size = UDim2.fromOffset(260, 130)
+
+frame.Position = UDim2.new(1, -280, 0, 40)
+
+frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+
+frame.BorderSizePixel = 0
+
+frame.Active = true
+
+frame.Draggable = true
+
+frame.Parent = gui
+
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 18)
+
+local frameStroke = Instance.new("UIStroke", frame)
+
+frameStroke.Color = Color3.fromRGB(120, 20, 20)
+
+frameStroke.Thickness = 2
+
+--// TITULO
+
+local title = Instance.new("TextLabel")
+
+title.Size = UDim2.new(1, 0, 0, 40)
+
+title.BackgroundTransparency = 1
+
+title.Text = "LYNOX HUB"
+
+title.TextColor3 = Color3.fromRGB(220, 40, 40)
+
+title.Font = Enum.Font.GothamBlack
+
+title.TextSize = 20
+
+title.Parent = frame
+
+TweenService:Create(
+
+title,
+
+TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+
+{TextStrokeTransparency = 0.75}
+
+):Play()
+
+--// BOTÓN
+
+local btn = Instance.new("TextButton")
+
+btn.Size = UDim2.fromOffset(220, 55)
+
+btn.Position = UDim2.new(0.5, -110, 0, 55)
+
+btn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+
+btn.BorderSizePixel = 0
+
+btn.Text = "🔥 FPS KILLER"
+
+btn.TextColor3 = Color3.fromRGB(200, 30, 30)
+
+btn.Font = Enum.Font.GothamBlack
+
+btn.TextSize = 18
+
+btn.Parent = frame
+
+Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 14)
+
+local btnStroke = Instance.new("UIStroke", btn)
+
+btnStroke.Color = Color3.fromRGB(120, 20, 20)
+
+btnStroke.Thickness = 2
+
+btn.MouseButton1Click:Connect(function()
+
+executeFpsKiller()
+
+end)
+
+--// LIMPIEZA PASIVA
+
+task.spawn(function()
+
+while true do
+
+cleanAll()  
+
+task.wait(5)
+
+end
+
+end)
