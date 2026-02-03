@@ -176,7 +176,7 @@ title.Size = UDim2.new(1, 0, 0, 40)
 
 title.BackgroundTransparency = 1
 
-title.Text = "LYNOX HUB"
+title.Text = "LYNOX X MACABROS"
 
 title.TextColor3 = Color3.fromRGB(220, 40, 40)
 
